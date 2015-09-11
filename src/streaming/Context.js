@@ -103,7 +103,9 @@ MediaPlayer.di.Context = function () {
             this.system.mapClass('insufficientBufferRule', MediaPlayer.rules.InsufficientBufferRule);
             this.system.mapClass('bufferOccupancyRule', MediaPlayer.rules.BufferOccupancyRule);
             this.system.mapClass('throughputRule', MediaPlayer.rules.ThroughputRule);
+            this.system.mapClass('displaySizeRule', MediaPlayer.rules.DisplaySizeRule);
             this.system.mapSingleton('abrRulesCollection', MediaPlayer.rules.ABRRulesCollection);
+            this.system.mapSingleton('abrRulesLimiter', MediaPlayer.rules.ABRRulesLimiter);
 
             this.system.mapSingleton('rulesController', MediaPlayer.rules.RulesController);
             this.system.mapClass('bufferLevelRule', MediaPlayer.rules.BufferLevelRule);

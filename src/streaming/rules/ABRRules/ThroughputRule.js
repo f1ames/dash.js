@@ -31,7 +31,6 @@
 MediaPlayer.rules.ThroughputRule = function () {
     "use strict";
 
-
     var throughputArray = [],
         lastSwitchTime = 0,
         AVERAGE_THROUGHPUT_SAMPLE_AMOUNT_LIVE = 2,
@@ -77,6 +76,7 @@ MediaPlayer.rules.ThroughputRule = function () {
         metricsModel: undefined,
         manifestExt:undefined,
         manifestModel:undefined,
+        abrRulesLimiter: undefined,
 
         execute: function (context, callback) {
             var self = this,
@@ -121,7 +121,8 @@ MediaPlayer.rules.ThroughputRule = function () {
                 if (bufferStateVO.state === MediaPlayer.dependencies.BufferController.BUFFER_LOADED &&
                     (bufferLevelVO.level >= (MediaPlayer.dependencies.BufferController.LOW_BUFFER_THRESHOLD*2) || isDynamic)) {
                     var newQuality = abrController.getQualityForBitrate(mediaInfo, averageThroughput);
-                    switchRequest = new MediaPlayer.rules.SwitchRequest(newQuality, MediaPlayer.rules.SwitchRequest.prototype.DEFAULT);
+                    var limitedQuality = this.abrRulesLimiter.getLimitedQuality(mediaType);
+                    switchRequest = new MediaPlayer.rules.SwitchRequest(limitedQuality !== undefined ? limitedQuality : newQuality, MediaPlayer.rules.SwitchRequest.prototype.DEFAULT);
                 }
 
                 if (switchRequest.value !== MediaPlayer.rules.SwitchRequest.prototype.NO_CHANGE && switchRequest.value !== current) {

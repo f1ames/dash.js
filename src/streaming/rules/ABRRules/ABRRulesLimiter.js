@@ -28,42 +28,27 @@
  *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  */
-MediaPlayer.rules.ABRRulesCollection = function () {
+MediaPlayer.rules.ABRRulesLimiter = function () {
     "use strict";
 
-    var qualitySwitchRules = [],
-        adandonFragmentRules = [];
+    var limitedQuality = {};
 
     return {
-        insufficientBufferRule: undefined,
-        bufferOccupancyRule:undefined,
-        throughputRule:undefined,
-        abandonRequestRule:undefined,
-        displaySizeRule:undefined,
 
-        getRules: function (type) {
-            switch (type) {
-                case MediaPlayer.rules.ABRRulesCollection.prototype.QUALITY_SWITCH_RULES:
-                    return qualitySwitchRules;
-                case MediaPlayer.rules.ABRRulesCollection.prototype.ABANDON_FRAGMENT_RULES:
-                    return adandonFragmentRules;
-                default:
-                    return null;
-            }
+        getLimitedQuality: function(mediaType) {
+            return limitedQuality[mediaType];
         },
 
-        setup: function () {
-            qualitySwitchRules.push(this.insufficientBufferRule);
-            qualitySwitchRules.push(this.throughputRule);
-            qualitySwitchRules.push(this.bufferOccupancyRule);
-            qualitySwitchRules.push(this.displaySizeRule);
-            adandonFragmentRules.push(this.abandonRequestRule);
+        setLimitedQuality: function(quality, mediaType) {
+            limitedQuality[mediaType] = quality;
+        },
+
+        reset: function() {
+            limitedQuality = {};
         }
     };
 };
 
-MediaPlayer.rules.ABRRulesCollection.prototype = {
-    constructor: MediaPlayer.rules.ABRRulesCollection,
-    QUALITY_SWITCH_RULES: "qualitySwitchRules",
-    ABANDON_FRAGMENT_RULES: "abandonFragmentRules"
+MediaPlayer.rules.ABRRulesLimiter.prototype = {
+    constructor: MediaPlayer.rules.ABRRulesData
 };
